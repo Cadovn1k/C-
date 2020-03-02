@@ -1,0 +1,37 @@
+//превышает ограничение на время работы
+package Site2ndweek;
+
+import java.io.*;
+import java.util.Scanner;
+
+public class Number2 {
+    public static void main(String[] args) {
+        try (FileWriter fin = new FileWriter("output.txt", false)){
+            File file = new File("input.txt");
+            Scanner inp = new Scanner(file);
+            int[] mas = new int[inp.nextInt()];
+            for (int i = 0; i < mas.length; i++) {
+                mas[i] = inp.nextInt();
+            }
+            int inv = 0;
+            boolean sorted = false;
+            while(!sorted) {
+                sorted = true;
+                for (int i = 0; i < mas.length - 1; i++) {
+                    if (mas[i] > mas[i+1]) {
+                        int temp = mas[i];
+                        mas[i] = mas[i+1];
+                        mas[i+1] = temp;
+                        sorted = false;
+                        inv++;
+                    }
+                }
+            }
+            fin.write(String.valueOf(inv));
+        } catch (Exception e){
+            System.out.println("ERROR");
+        }
+
+    }
+
+}
