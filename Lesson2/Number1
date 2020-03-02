@@ -1,85 +1,89 @@
-//не работает
 package Site2ndweek;
+
 import java.io.*;
-import java.util.Scanner;
-public class Number1 {
+import java.util.Arrays;
+
+public class Nn1 {
     public static void main(String[] args) throws Exception {
-        try (FileReader fout = new FileReader("input.txt");
-             FileWriter fin = new FileWriter("output.txt", false)){
-            Scanner inp = new Scanner(fout);
-            int n = inp.nextInt();
-            int[] mas = new int[n];
-            for (int i = 0; i < mas.length; i++) {
-                mas[i] = inp.nextInt();
-                System.out.print(mas[i] + " ");
+        try(BufferedReader br = new BufferedReader(new FileReader("input.txt"))) {
+            String line = br.readLine(); // считаем сначала первую строку
+            final LineNumberReader lnr = new LineNumberReader(new FileReader(new File("input.txt")));
+            int r=0;
+            String l1="";
+            String l2="";
+            while(null != lnr.readLine()) {
+                if(r==0){
+                    l1=line;
+                    r=1;
+                    line = br.readLine();
+                }
+                else
+                    l2=line;
             }
-//            System.out.println();
-            String sort = "";
-            mergeSort(mas,0, mas.length - 1);
+            int mch[]=new int[Integer.parseInt(l1)];
+            String[] customer = l2.split(" ");//разделены пробелом
+            int mas[]= new int [Integer.parseInt(l1)];
+            for (int i=0; i<mas.length; i++){
+                mas[i]= Integer.parseInt(customer[i]);
+            }
+            StringBuffer s=new StringBuffer("");
 
-            for (int i = 0; i < mas.length; i++) {
-                sort += mas[i] + " ";
+            int[] result = mergesort(mas,s);
+            for (int i=0;i<mas.length; i++) {
+                s.append(result[i]).append(" ");
             }
-            fin.write(sort);
-            fin.close();
+            System.out.println(s);
+            FileWriter writer = new FileWriter("output.txt"); //загрузка в файл
+            writer.write(String.valueOf(s));
+            writer.close();
+
+        }
+        catch(IOException ex){
+            System.out.println(ex.getMessage());
         }
     }
-    public static void mergeSort(int[] array, int left, int right) throws IOException {
-        if (right <= left) return;
-        int mid = (left+right)/2;
-        mergeSort(array, left, mid);
-        mergeSort(array, mid+1, right);
-        merge(array, left, mid, right);
+    public static int[] mergesort(int[] array1,StringBuffer s) {  //сортировка слиянием
+        int[] buffer1 = Arrays.copyOf(array1, array1.length);
+        int[] buffer2 = new int[array1.length];
+        int[] result = mergesortInner(buffer1, buffer2, 0, array1.length,s);
+        return result;
     }
-    public static void merge(int[] array, int left, int mid, int right) throws IOException {
-        try (FileWriter fin = new FileWriter("output.txt", false)) {
-            String str = "";
-            // вычисляем длину
-            int lengthLeft = mid - left + 1;
-            int lengthRight = right - mid;
 
-            // создаем временные подмассивы
-            int leftArray[] = new int[lengthLeft];
-            int rightArray[] = new int[lengthRight];
 
-            // копируем отсортированные массивы во временные
-            for (int i = 0; i < lengthLeft; i++)
-                leftArray[i] = array[left + i];
-            for (int i = 0; i < lengthRight; i++)
-                rightArray[i] = array[mid + i + 1];
 
-            // итераторы содержат текущий индекс временного подмассива
-            int leftIndex = 0;
-            int rightIndex = 0;
+//    buffer2 Буфер. Размер должен быть равен размеру buffer1.
+//    startIndex Начальный индекс в buffer1 для сортировки.
+//    endIndex Конечный индекс в buffer1 для сортировки.
 
-            // копируем из leftArray и rightArray обратно в массив
-            for (int i = left; i < right + 1; i++) {
-                // если остаются нескопированные элементы в R и L, копируем минимальный
-                if (leftIndex < lengthLeft && rightIndex < lengthRight) {
-                    if (leftArray[leftIndex] < rightArray[rightIndex]) {
-                        array[i] = leftArray[leftIndex];
-                        leftIndex++;
-                    } else {
-                        array[i] = rightArray[rightIndex];
-                        rightIndex++;
-                    }
-                }
-                // если все элементы были скопированы из rightArray, скопировать остальные из leftArray
-                else if (leftIndex < lengthLeft) {
-                    array[i] = leftArray[leftIndex];
-                    leftIndex++;
-                }
-                // если все элементы были скопированы из leftArray, скопировать остальные из rightArray
-                else if (rightIndex < lengthRight) {
-                    array[i] = rightArray[rightIndex];
-                    rightIndex++;
-                }
-            }
-            str += "\n" + left + " " + right + " " + array[left] + " " + array[right];
-            fin.write(str);
-        } catch (Exception e) {
-            System.out.println("ERROR");
+
+    public static int[] mergesortInner(int[] buffer1, int[] buffer2, int startIndex, int endIndex, StringBuffer s) {
+        if (startIndex >= endIndex - 1) {
+            return buffer1;
         }
-    }
 
+        // уже отсортирован.
+        int middle = startIndex + (endIndex - startIndex) / 2;
+        int[] sorted1 = mergesortInner(buffer1, buffer2, startIndex, middle,s);
+        int[] sorted2 = mergesortInner(buffer1, buffer2, middle, endIndex,s);
+
+        // Слияние
+
+        int index1 = startIndex;
+        int index2 = middle;
+        int destIndex = startIndex;
+        int[] result = sorted1 == buffer1 ? buffer2 : buffer1;
+        while (index1 < middle && index2 < endIndex) {
+            result[destIndex++] = sorted1[index1] < sorted2[index2]
+                    ? sorted1[index1++] : sorted2[index2++];
+        }
+        while (index1 < middle) {
+            result[destIndex++] = sorted1[index1++];
+        }
+        while (index2 < endIndex) {
+            result[destIndex++] = sorted2[index2++];
+        }
+        s.append(startIndex+1).append(" ").append(endIndex).append(" ").append(result[startIndex]).append(" ").append(result[endIndex-1]).append("\n");
+
+        return result;
+    }
 }
