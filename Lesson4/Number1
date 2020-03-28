@@ -1,0 +1,29 @@
+package Site4thweek;
+
+import java.io.*;
+import java.util.Scanner;
+import java.util.Stack;
+
+public class Number1 {
+    public static void main(String[] args) {
+        try (FileWriter fin = new FileWriter("output.txt", false)) {
+            File file = new File("input.txt");
+            Scanner inp = new Scanner(file);
+            Stack<Long> stack = new Stack<>();
+            stack.add(Long.parseLong(inp.nextLine()));
+            while ( inp.hasNextLine() ){
+                String st = inp.nextLine();
+                if ( st.substring(0,1).equals("+") ){
+                    stack.add(Long.parseLong(st.substring(2,st.length())));
+                }
+                else {
+                    st = st.replaceFirst("- ", "");
+                    fin.write(String.valueOf(stack.pop()) + "\n");
+                }
+            }
+
+        } catch (Exception e){
+            System.out.println("Error");
+        }
+    }
+}
