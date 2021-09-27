@@ -1,0 +1,59 @@
+using System;
+using System.Linq;
+
+namespace Med_Graph
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //заполянем массив случайными числами
+            var rnd = new Random();
+
+            int size = 5;
+            int[,] graph = new int[size, size];
+
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                    graph[i, j] = rnd.Next(10);
+            }
+                
+
+            var mediana = CalcMediana(graph, size);
+
+            Console.WriteLine("Граф : ");
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                    Console.Write(graph[i, j] + " ");
+                Console.WriteLine();
+            }
+            Console.WriteLine("Медиана = {0}", mediana);
+            Console.ReadKey();
+        }
+        private static object CalcMediana(int[,] graph, int size)
+        {
+            //считаем общую сумму
+            var sum = 0;
+            for (int i = 0; i < size; i++) 
+            {
+                for (int j = 0; j < size; j++)
+                    sum += graph[i, j];
+            }
+            //перебираем элементы, пока не достигнем 50% от суммы:
+            var accum = 0;
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    accum += graph[i,j];
+                    if (accum >= sum / 2)
+                        return i + j;
+                }
+                    
+            }
+            return graph.Length;
+        }
+    }
+}
