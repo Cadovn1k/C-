@@ -1,0 +1,42 @@
+using System;
+using System.IO;
+
+namespace Weather
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string path = @"C:\Users\Admin\Desktop\Моя прелесть\Weather.txt";  
+            int[][] nums = new int[12][];
+            for (int i = 0; i < nums.Length; i++)
+            {
+                if (i % 2 == 0 && i <= 6 || i % 2 == 1 && i > 6)
+                    nums[i] = new int[31];
+                else
+                    nums[i] = new int[30];
+            }
+            int[] avg = new int[12];
+            using (StreamReader sr = new StreamReader(path, System.Text.Encoding.Default))
+            {
+                string line;
+                int k = 0;
+                
+                while ((line = sr.ReadLine()) != null)
+                {
+                    int kekw = nums[k].Length;
+                    for (int i = 0; i < nums[k].Length; i++)
+                    {
+                        avg[k] += Convert.ToInt32(line);
+                    }
+                    avg[k] /= nums[k].Length;
+                    k++;
+                }
+            }
+            for (int i = 0; i < avg.Length; i++)
+            {
+                Console.WriteLine("Средняя температура {0} месяца - {1}", i + 1, avg[i]);
+            }
+        }
+    }
+}
