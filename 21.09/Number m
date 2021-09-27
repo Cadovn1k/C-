@@ -1,0 +1,35 @@
+using System;
+
+namespace HelloApp
+{
+	class Program
+	{
+		static void Main(string[] args)
+		{
+			Console.Write("Размер массива : ");
+			int n = Convert.ToInt32(Console.ReadLine());
+			int[] nums = new int[n];
+			for (int i = 0; i < n; i++)
+            {
+				Console.WriteLine("Введите число в массив");
+				nums[i] = Convert.ToInt32(Console.ReadLine());
+			}
+			Console.WriteLine("Введите число M");
+			int m = Convert.ToInt32(Console.ReadLine());
+			int res = -1;
+			for (int i = 0; i < n; i++)
+            {
+				for (int j = i; j < n; j++)
+                {
+					if (nums[i] + nums[j] == m)
+                    {
+						Console.WriteLine("Элементы {0} и {1} в сумме дают число m", i + 1, j + 1);
+						res = 1;
+                    }
+                }
+            }
+			if (res == -1)
+				Console.WriteLine("Таких чисел нет");
+		}
+	}
+}
