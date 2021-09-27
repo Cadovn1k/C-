@@ -1,0 +1,69 @@
+using System;
+
+namespace Con_Graph
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            const int size = 6;
+            int[] VertexState = new int[size];
+            bool red = false;
+            int k = 0;
+            int finalCount = 0;
+            int[,] graph = new int[size, size]
+                    {
+                                    {0, 0, 5, 2, 4, 0},
+                                    {0, 0, 0, 7, 0, 6},
+                                    {5, 0, 0, 9, 1, 5},
+                                    {2, 7, 9, 0, 0, 2},
+                                    {4, 0, 1, 0, 0, 8},
+                                    {0, 6, 5, 2, 8, 0}
+                    };
+            for (int i = 0; i < size; i++)
+                VertexState[i] = 1; // все черные
+
+            VertexState[0] = 2; // красная
+
+            do
+            {
+                red = true;
+
+                for (int i = 0; i < size; i++)
+                {
+                    if (VertexState[i] == 2)
+                    {
+                        VertexState[i] = 3;
+                        k = i;
+                        break;
+                    }
+                }
+
+                for (int i = 0; i < size; i++)
+                {
+                    if (graph[k, i] == 1 && VertexState[i] == 1)
+                        VertexState[i] = 2;
+                }
+
+                for (int i = 0; i < size; i++)
+                {
+                    if (VertexState[i] == 2)
+                        red = false;
+                }
+
+            } while (red == false);
+
+
+            for (int i = 0; i < size; i++)
+                if (VertexState[i] == 1)
+                    finalCount++;
+
+            if (finalCount == 0)
+                Console.WriteLine("Граф связный");
+            else
+                Console.WriteLine("Граф несвязный");
+
+
+        }
+    }
+}
