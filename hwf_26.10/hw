@@ -1,0 +1,107 @@
+using System;
+
+namespace Example_of_class
+{
+    class Program
+    {
+        class Set1
+        {
+            int[] a;
+            int n;
+
+            public Set1() { }
+            public Set1(int nn) 
+            {
+                a = new int[nn];
+                n = 0;
+            }
+            public Set1(int[] mas)
+            {
+                a = new int[mas.Length];
+                a[0] = mas[0];
+                n = 1;
+                for(int i = 1; i < mas.Length; i++)
+                {
+                    bool flag = true;
+                    for(int j = 0; j < n; j++)
+                    {
+                        if (mas[i] == a[j])
+                        {
+                            flag = false;
+                            break;
+                        }
+                    }
+                    if (flag)
+                    {
+                        a[n] = mas[i];
+                        n++;
+                    }
+                }
+            }
+            public int N
+            {
+                get => n;
+            }
+            public int this[int i]
+            {
+                get
+                {
+                    if (i < 0 || i >= n) throw new Exception("Index out");
+                    return a[i];
+                }
+                set
+                {
+                    if (i < 0 || i >= n) throw new Exception("Index out");
+                    for (int j = 0; j < n; j++)
+                    {
+                        if (a[j] == value) throw new Exception("Double element (повторяющийся элемен)");
+                        a[i] = value;
+                    }
+                }
+            }
+            public void Print()
+            {
+                //сделать дома
+            }
+            public bool Add(int x)
+            {
+                //сделать дома
+                return true;
+            }
+            public bool Equal(Set1 set1)
+            {
+                //сделать дома
+                return true;
+            }
+            public bool Contains(int x)
+            {
+                //сделать дома
+                return true;
+            }
+            public Set1 Intersect(Set1 set1)
+            {
+                //сделать дома
+                return null;
+            }
+            public Set1 Union(Set1 set1)
+            {
+                //сделать дома
+                return null;
+            }
+            public Set1 Substraction(Set1 set1)
+            {
+                //сделать дома
+                return null;
+            }
+            public bool Subset(Set1 set1)
+            {
+                //сделать дома
+                return true;
+            }
+        }
+        static void Main(string[] args)
+        {
+            
+        }
+    }
+}
