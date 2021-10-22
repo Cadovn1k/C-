@@ -10,7 +10,7 @@ namespace Example_of_class
             int n;
 
             public Set1() { }
-            public Set1(int nn) 
+            public Set1(int nn)
             {
                 a = new int[nn];
                 n = 0;
@@ -20,10 +20,10 @@ namespace Example_of_class
                 a = new int[mas.Length];
                 a[0] = mas[0];
                 n = 1;
-                for(int i = 1; i < mas.Length; i++)
+                for (int i = 1; i < mas.Length; i++)
                 {
                     bool flag = true;
-                    for(int j = 0; j < n; j++)
+                    for (int j = 0; j < n; j++)
                     {
                         if (mas[i] == a[j])
                         {
@@ -61,47 +61,197 @@ namespace Example_of_class
             }
             public void Print()
             {
-                //сделать дома
+                for (int i = 0; i < a.Length; i++)
+                {
+                    Console.Write(a[i] + " ");
+                }
+                Console.WriteLine();
             }
             public bool Add(int x)
             {
-                //сделать дома
+                bool flag = true;
+                for (int i = 0; i < a.Length; i++)
+                {
+                    if (a[i] == x)
+                    {
+                        flag = false;
+                    }
+                }
+                if (flag)
+                {
+                    n = a.Length + 1;
+                    int[] mas = new int[n];
+                    for (int i = 0; i < n - 1; i++)
+                    {
+                        mas[i] = a[i];
+                    }
+                    a = mas;
+                    a[n - 1] = x;
+                }
                 return true;
             }
             public bool Equal(Set1 set1)
             {
-                //сделать дома
-                return true;
+                if (a.Length != set1.N) return false;
+                int num = 0;
+                bool flag = true;
+                for (int i = 0; i < n; i++)
+                {
+                    for (int j = 0; j < n; j++)
+                    {
+                        if (set1[j] == a[i])
+                        {
+                            num++;
+                            break;
+                        }
+                    }
+                }
+                if (num != n) flag = false;
+                return flag;
             }
             public bool Contains(int x)
             {
-                //сделать дома
-                return true;
+                bool flag = false;
+                for (int i = 0; i < n; i++)
+                {
+                    if (x == a[i])
+                    {
+                        flag = true;
+                        break;
+                    }
+                }
+                return flag;
             }
             public Set1 Intersect(Set1 set1)
             {
-                //сделать дома
-                return null;
+                int[] mas = new int[n];
+                int num = 0;
+                for (int i = 0; i < n; i++)
+                {
+                    for (int j = 0; j < set1.N; j++)
+                    {
+                        if (a[i] == set1[j])
+                        {
+                            mas[num] = a[i];
+                            num++;
+                            break;
+                        }
+                    }
+                }
+                if (n == mas.Length) return new Set1(mas);
+                else
+                {
+                    int[] nmas = new int[num];
+                    for (int i = 0; i < num; i++)
+                    {
+                        nmas[i] = mas[i];
+                    }
+                    return new Set1(nmas);
+                }
             }
             public Set1 Union(Set1 set1)
             {
-                //сделать дома
-                return null;
+                Set1 un = new Set1(new int{ });
+                for (int i = 0; i < n; i++)
+                {
+                    un.Add(a[i]);
+                }
+                for (int i = 0; i < set1.N; i++)
+                {
+                    un.Add(set1[i]);
+                }
+                return un;
             }
             public Set1 Substraction(Set1 set1)
             {
-                //сделать дома
-                return null;
+                int[] mas = new int[n];
+                int num = 0;
+                for (int i = 0; i < n; i++)
+                {
+                    bool flag = true;
+                    for (int j = 0; j < set1.N; j++)
+                    {
+                        if (a[i] == set1[j])
+                        {
+                            flag = false;
+                            break;
+                        }
+                    }
+                    if (flag)
+                    {
+                        mas[num] = a[i];
+                        num++;
+                    }
+                }
+                if (num == n) return new Set1(mas);
+                else 
+                {
+                    int[] nmas = new int[num];
+                    for (int i = 0; i < nmas.Length; i++)
+                    {
+                        nmas[i] = mas[i];
+                    }
+                    return new Set1(nmas);
+                }
             }
             public bool Subset(Set1 set1)
             {
-                //сделать дома
-                return true;
+                int num = 0;
+                for (int i = 0; i < set1.N; i++)
+                {
+                    for (int j = 0; j < a.Length; j++)
+                    {
+                        if (set1[i] == a[j])
+                        {
+                            num++;
+                        }
+                    }
+                }
+                if (num == set1.N) return true;
+                else return false;
             }
         }
         static void Main(string[] args)
         {
-            
+            int[] arr = new int[5] {1, 2, 3, 4, 5 };
+            Set1 ex = new Set1(arr);
+            Console.Write("Наше множество : ");
+            ex.Print();
+            int ad = 6;
+            if (ex.Add(ad))
+            {
+                Console.WriteLine("Добавлен элемент : " + ad);
+            }
+            else Console.WriteLine("Элемент {0} уже есть в множестве", ad);
+            Set1 set1 = new Set1(new int[6]{1, 2, 3, 4, 5, 6});
+            if (ex.Equal(set1))
+            {
+                Console.WriteLine("Множества ex и set1 совпадают");
+            }
+            else Console.WriteLine("Множества ex и set1 отличаются");
+            int con = 1;
+            if (ex.Contains(con))
+            {
+                Console.WriteLine("Элемент {0} находится во множестве", con);
+            }
+            else Console.WriteLine("Элемента {0} нет во множестве", con);
+
+            Set1 set2 = new Set1(new int[10] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
+            Set1 inters = ex.Intersect(set2);
+            Console.Write("Пересечение множеств ex и set2 : ");
+            inters.Print();
+
+            Set1 set3 = new Set1(new int[10] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+            Set1 un = ex.Union(set3);
+            Console.Write("Объединение множеств ex и set3 : ");
+            un.Print();
+
+            Set1 substr = set3.Substraction(ex);
+            Console.Write("Вычитание множества ex из set3 : ");
+            substr.Print();
+
+            if (un.Subset(substr)) Console.Write("Множество substr является подмножеством un: ");
+            else Console.Write("Множество substr не является подмножеством un: ");
         }
     }
 }
