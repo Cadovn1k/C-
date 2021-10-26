@@ -255,6 +255,22 @@ namespace ASD
 
                 return true;
             }
+
+            public static explicit operator int[](Set1 s1)
+            {
+                int[] x = new int[s1.N];
+                for (int i = 0; i < s1.N; i++)
+                    x[i] = s1.a[i];
+                return x;
+            }
+
+            public static explicit operator Set1(int[] x)
+            {
+                //дома
+                return null;
+            }
+
+
             static void Main(string[] args)
             {
                 int[] arr = new int[5] { 1, 2, 3, 4, 5 };
@@ -308,7 +324,9 @@ namespace ASD
                 Console.WriteLine(s1 == s2);
                 if (s1) Console.WriteLine("Positive");
                 else Console.WriteLine("Negative exists");
-                
+                int[] y = (int[])s1;
+                foreach (int val in y)
+                    Console.Write(val + " ");
             }
         }
     }
