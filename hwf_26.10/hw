@@ -1,6 +1,6 @@
 using System;
 
-namespace Example_of_class
+namespace ASD
 {
     class Program
     {
@@ -151,7 +151,7 @@ namespace Example_of_class
             }
             public Set1 Union(Set1 set1)
             {
-                Set1 un = new Set1(new int{ });
+                Set1 un = new Set1(new int { });
                 for (int i = 0; i < n; i++)
                 {
                     un.Add(a[i]);
@@ -184,7 +184,7 @@ namespace Example_of_class
                     }
                 }
                 if (num == n) return new Set1(mas);
-                else 
+                else
                 {
                     int[] nmas = new int[num];
                     for (int i = 0; i < nmas.Length; i++)
@@ -210,48 +210,106 @@ namespace Example_of_class
                 if (num == set1.N) return true;
                 else return false;
             }
-        }
-        static void Main(string[] args)
-        {
-            int[] arr = new int[5] {1, 2, 3, 4, 5 };
-            Set1 ex = new Set1(arr);
-            Console.Write("Наше множество : ");
-            ex.Print();
-            int ad = 6;
-            if (ex.Add(ad))
+
+            public static Set1 operator ++(Set1 s1)
             {
-                Console.WriteLine("Добавлен элемент : " + ad);
+                for (int i = 0; i < s1.N; i++)
+                    s1.a[i]++;
+                return s1;
             }
-            else Console.WriteLine("Элемент {0} уже есть в множестве", ad);
-            Set1 set1 = new Set1(new int[6]{1, 2, 3, 4, 5, 6});
-            if (ex.Equal(set1))
+
+            public static bool operator true(Set1 s1)
             {
-                Console.WriteLine("Множества ex и set1 совпадают");
+                for (int i = 0; i < s1.N; i++)
+                    if (s1.a[i] < 0) return false;
+                return true;
             }
-            else Console.WriteLine("Множества ex и set1 отличаются");
-            int con = 1;
-            if (ex.Contains(con))
+
+            public static bool operator false(Set1 s1)
             {
-                Console.WriteLine("Элемент {0} находится во множестве", con);
+                for (int i = 0; i < s1.N; i++)
+                    if (s1.a[i] < 0) return false;
+                return true;
             }
-            else Console.WriteLine("Элемента {0} нет во множестве", con);
 
-            Set1 set2 = new Set1(new int[10] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
-            Set1 inters = ex.Intersect(set2);
-            Console.Write("Пересечение множеств ex и set2 : ");
-            inters.Print();
+            public static bool operator ==(Set1 s1, Set1 s2)
+            {
+                if (s1.n != s2.n) return false;
+                for (int i = 0; i < s1.n; i++)
+                {
+                    bool exists = false;
+                    foreach (int val in s2.a)
+                        if (val == s1.a[i])
+                        {
+                            exists = true;
+                            break;
+                        }
+                    if (!exists) return false;
+                }
+                return true;
+            }
 
-            Set1 set3 = new Set1(new int[10] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
-            Set1 un = ex.Union(set3);
-            Console.Write("Объединение множеств ex и set3 : ");
-            un.Print();
+            public static bool operator !=(Set1 s1, Set1 s2)
+            {
+                if (s1 == s2) return false;
 
-            Set1 substr = set3.Substraction(ex);
-            Console.Write("Вычитание множества ex из set3 : ");
-            substr.Print();
+                return true;
+            }
+            static void Main(string[] args)
+            {
+                int[] arr = new int[5] { 1, 2, 3, 4, 5 };
+                Set1 ex = new Set1(arr);
+                Console.Write("Наше множество : ");
+                ex.Print();
+                int ad = 6;
+                if (ex.Add(ad))
+                {
+                    Console.WriteLine("Добавлен элемент : " + ad);
+                }
+                else Console.WriteLine("Элемент {0} уже есть в множестве", ad);
+                Set1 set1 = new Set1(new int[6] { 1, 2, 3, 4, 5, 6 });
+                if (ex.Equal(set1))
+                {
+                    Console.WriteLine("Множества ex и set1 совпадают");
+                }
+                else Console.WriteLine("Множества ex и set1 отличаются");
+                int con = 1;
+                if (ex.Contains(con))
+                {
+                    Console.WriteLine("Элемент {0} находится во множестве", con);
+                }
+                else Console.WriteLine("Элемента {0} нет во множестве", con);
 
-            if (un.Subset(substr)) Console.Write("Множество substr является подмножеством un: ");
-            else Console.Write("Множество substr не является подмножеством un: ");
+                Set1 set2 = new Set1(new int[10] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+                Set1 inters = ex.Intersect(set2);
+                Console.Write("Пересечение множеств ex и set2 : ");
+                inters.Print();
+
+                Set1 set3 = new Set1(new int[10] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+                Set1 un = ex.Union(set3);
+                Console.Write("Объединение множеств ex и set3 : ");
+                un.Print();
+
+                Set1 substr = set3.Substraction(ex);
+                Console.Write("Вычитание множества ex из set3 : ");
+                substr.Print();
+
+                if (un.Subset(substr)) Console.Write("Множество substr является подмножеством un: ");
+                else Console.Write("Множество substr не является подмножеством un: ");
+
+                Console.WriteLine();
+                // операции
+                Console.WriteLine("Примеры для операций : ");
+                Set1 s1 = new Set1(new int[] { 1, 2, 3, 4, 5 });
+                Set1 s2 = new Set1(new int[] { 1, 2, 3, 4, 5 });
+                Console.WriteLine(s1 == s2);
+                s1++;
+                s1.Print();
+                Console.WriteLine(s1 == s2);
+                if (s1) Console.WriteLine("Positive");
+                else Console.WriteLine("Negative exists");
+                
+            }
         }
     }
 }
