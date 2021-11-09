@@ -1,0 +1,188 @@
+using System;
+
+namespace BinaryTree
+{
+    class Program
+    {
+        class TElement
+        {
+            public int x;
+            public TElement left, right;
+            public TElement(int kk)
+            {
+                x = kk;
+                left = null;
+                right = null;
+            }
+        }
+        class Tree
+        {
+            TElement root;
+
+            public Tree() { root = null; }
+
+            public void Add(int k)
+            {
+                if (root == null)
+                {
+                    root = new TElement(k);
+                    return;
+                }
+                TElement p = root;
+                while (true)
+                {
+                    if (p.x > k)
+                    {
+                        if (p.left != null)
+                            p = p.left;
+                        else
+                        {
+                            p.left = new TElement(k);
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        if (p.right != null)
+                            p = p.right;
+                        else
+                        {
+                            p.right = new TElement(k);
+                            return;
+                        }
+                    }
+                }
+            }
+
+            public void PrintR(TElement te)
+            {
+                if (te.left != null) PrintR(te.left);
+                Console.Write(te.x + " ");
+                if (te.right != null) PrintR(te.right);
+            }
+
+            public void Print()
+            {
+                Console.WriteLine("==================");
+                PrintR(root);
+                Console.WriteLine();
+            }
+            // Домашка
+            public bool Remove(int k) 
+            {
+                TElement prev = root;
+                TElement next = root;
+                //TElement el = new TElement(k);
+                TElement p = root;
+                if (this.Find(k) == null)
+                    return false;
+                if (root.x == k)
+                {
+                    if (root.right != null) 
+                    {
+                        TElement rleft = root.left;
+                        root = root.right;
+                        TElement t = root;
+                        while (t.left != null)
+                            t = t.left;
+                        t.left = rleft;
+                        return true;
+                    }
+                    else
+                    {
+                        root = root.left;
+                        return true;
+                    }
+                }
+                else
+                {
+                    while(p.x != k)
+                    {
+                        if (p.x < k)
+                        {
+                            prev = p;
+                            p = p.right;
+                        }
+                        else
+                        {
+                            prev = p;
+                            p = p.left;
+                        }
+                    }
+                    if (p.x < prev.x)
+                    {
+                        TElement pl = p.left;
+                        if (p.right != null)
+                        {
+                            prev.left = p.right;
+                            TElement t = p.right;
+                            while (t.left != null)
+                                t = t.left;
+                            t.left = pl;
+                        }
+                        else
+                            prev.left = p.left;
+                    }
+                }
+                return true; 
+            }
+
+            public TElement Find(int k)
+            {
+                TElement p = root;
+                while (p != null)
+                {
+                    if (p.x == k) return p;
+                    if (k < p.x)
+                    {
+                        if (p.left != null)
+                            p = p.left;
+                        else
+                            return null;
+                    }
+                    if (k >= p.x)
+                    {
+                        if (p.right != null)
+                            p = p.right;
+                        else
+                        {
+                            return null;
+                        }
+                    }
+                }
+                return null;
+            }
+            //public bool Find(int k) { return true; }
+            public int Count(int k) { return 0; }
+            public int Max
+            {
+                get { return 0; }
+                set { }
+            }
+            public int Min
+            {
+                get { return 0; }
+                set { }
+            }
+            public int CountLevels() { return 0; }
+            public int CountLeaves() { return 0; }
+            public int Sum() { return 0; }
+            public static bool operator == (Tree t1, Tree t2) { return true; }
+            public static bool operator !=(Tree t1, Tree t2) { return true; }
+            public Tree Copy() { return null; }
+            public void PrintLevels() { }// использовать стек, который разработали дома
+
+        }
+        static void Main(string[] args)
+        {
+            Tree tree = new Tree();
+            String s = " ";
+            while ((s = Console.ReadLine()) != "")
+            {
+                int x = int.Parse(s);
+                tree.Add(x);
+            }
+            tree.Print();
+        }
+    }
+}
