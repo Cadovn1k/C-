@@ -142,6 +142,50 @@ namespace K_R_2
             ex1.PushBack(4);
             ex1.PushBack(5);
             ex1.Print();
+            // Второе задание
+            Deck queue1 = new Deck();
+            Deck queue2 = new Deck();
+            queue1.PushBack(1);
+            queue1.PushBack(2);
+            queue1.PushBack(3);
+            queue1.PushBack(4);
+            queue1.PushBack(5);
+            queue2.PushBack(2);
+            queue2.PushBack(6);
+            queue2.PushBack(7);
+            queue2.PushBack(8);
+            queue2.PushBack(5);
+            Console.WriteLine("Наша первая очередь : ");
+            queue1.Print();
+            Console.WriteLine("Наша вторая очередь : ");
+            queue2.Print();
+            DElement t1 = queue1.PopFront();
+            DElement t2 = queue1.PopFront();
+            DElement t22 = t2;
+            //DElement t1 = new DElement(queue1.Front());
+            //DElement t2 = new DElement(queue2.Front());
+            bool flag = true;
+            Deck res = new Deck();
+            for (; t1 != null; t1 = t1.Next)
+            {
+                for (; t2 != null; t2 = t2.Next)
+                {
+                    if (t1 == t2)
+                    {
+                        flag = false;
+                        break;
+                    }     
+                }
+                t2 = t22;
+                if (flag)
+                {
+                    res.PushBack(t1.Val);
+                }     
+            }
+            Console.WriteLine("Результат удаления из первой очереди клиентов, стоящих в двух очередях : ");
+            res.Print();
+            
+
         }
     }
 }
