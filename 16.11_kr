@@ -1,0 +1,147 @@
+using System;
+
+namespace K_R_2
+{
+    class Program
+    {
+        class DElement
+        {
+            int val;
+            DElement next;
+            public DElement(int v)
+            {
+                val = v;
+                next = null;
+            }
+            public int Val
+            {
+                get => val;
+                set { val = value; }
+            }
+            public DElement Next
+            {
+                get => next;
+                set { next = value;}
+            }
+        }
+        class Deck
+        {
+            DElement first;
+            DElement last;
+            public Deck()
+            {
+                first = null;
+                last = null;
+            }
+            public void PushFront(int v)
+            {
+                DElement n = new DElement(v);
+                n.Next = first;
+                first = n;
+                if (first.Next == null)
+                    last = first;
+            }
+            public void PushBack(int v)
+            {
+                if(last == null)
+                {
+                    last = new DElement(v);
+                }
+                else
+                {
+                    DElement l = new DElement(v);
+                    last.Next = l;
+                    last = l;
+                }
+                if (first == null)
+                    first = last;
+            }
+            public DElement PopFront()
+            {
+                DElement f = first;
+                first = first.Next;
+                return f;
+            }
+            public DElement PopBack()
+            {
+                DElement t = first;
+                while (t.Next != last)
+                    t = t.Next;
+                DElement res = t.Next;
+                t.Next = null;
+                last = t;
+                return res;
+            }
+            public int Front()
+            {
+                return first.Val;
+            }
+            public int Back()
+            {
+                return last.Val;
+            }
+            public bool Empty()
+            {
+                if (first == null && last == null)
+                    return true;
+                else
+                    return false;
+            }
+            public int Size()
+            {
+                DElement t = first;
+                int size = 0;
+                for (; t != null; t = t.Next)
+                    size++;
+                return size;
+            }
+            public void Clear()
+            {
+                first = null;
+                last = null;
+            }
+            public void Print()
+            {
+                DElement t = first;
+                for (; t != null; t = t.Next)
+                    Console.Write(t.Val + " ");
+                Console.WriteLine();
+            }
+        }
+        static void Main(string[] args)
+        {
+            Deck ex1 = new Deck();
+            ex1.PushFront(1);
+            ex1.PushFront(2);
+            ex1.PushFront(3);
+            ex1.PushFront(4);
+            ex1.PushFront(5);
+            ex1.Print();
+            Console.WriteLine("Удалим первый элемент равный {0}", ex1.PopFront().Val);
+            ex1.Print();
+            Console.WriteLine("Удалим последний элемент равный {0}", ex1.PopBack().Val);
+            ex1.Print();
+            Console.WriteLine("Узнаем значение первого элемента равного {0}", ex1.Front());
+            Console.WriteLine("Узнаем значение последнего элемента равного {0}", ex1.Back());
+            Console.WriteLine("Проверим пуст ли ex1");
+            if (ex1.Empty())
+                Console.WriteLine("ex1 пуст");
+            else
+                Console.WriteLine("ex1 не пуст");
+            Console.WriteLine("Размер ex1 = {0}", ex1.Size());
+            Console.WriteLine("Очистим ex1 и проверим очистился ли");
+            ex1.Clear();
+            if (ex1.Empty())
+                Console.WriteLine("ex1 пуст");
+            else
+                Console.WriteLine("ex1 не пуст");
+            Console.WriteLine("Заполним ex1 теми же элементами, но заполним с конца");
+            ex1.PushBack(1);
+            ex1.PushBack(2);
+            ex1.PushBack(3);
+            ex1.PushBack(4);
+            ex1.PushBack(5);
+            ex1.Print();
+        }
+    }
+}
