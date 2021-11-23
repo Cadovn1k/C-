@@ -1,0 +1,201 @@
+using System;
+
+namespace Nasledovanie
+{
+    class Card
+    {
+        protected int num;
+        protected string name;
+        protected double balance;
+        public Card()
+        {
+            num = 0;
+            balance = 0;
+            name = "Noname";
+        }
+        public Card(int num, string name, double balance)
+        {
+            this.num = num;
+            this.name = name;
+            this.balance = balance;
+        }
+        public double Num
+        {
+            get => num;
+        }
+        virtual public void Print()
+        {
+            Console.WriteLine("=======================");
+            Console.WriteLine("Account : " + num);
+            Console.WriteLine("Name : " + name);
+            Console.WriteLine("Balance : " + balance);
+        }
+        virtual public void Withdraw(double s)
+        {
+            if (s > balance) Console.WriteLine("Not supported operation");
+            else balance -= s;
+        }
+        virtual public void Deposit(double s)
+        {
+            if (s > 0) balance += s;
+            else Console.WriteLine("Not supported operation");
+        }
+    }
+    class Creditcard : Card
+    {
+        double credit;
+        double limit;
+        double percent;
+        public Creditcard(int n, string nm, double b, double cr = 0, double lim = 10000, double p = 0.1) :
+            base (n, nm, b)
+        {
+            credit = cr;
+            limit = lim;
+            percent = p;
+        }
+        public double Credit { get => credit; }
+        public double Limit { get => limit; }
+        public override void Print()
+        {
+            base.Print();
+            Console.WriteLine("Credit : " + credit);
+            Console.WriteLine("Limit : " + limit);
+            Console.WriteLine("Percent : " + percent);
+        }
+        public override void Withdraw(double s)
+        {
+            if (s <= base.balance) base.Withdraw(s);
+            if (s > base.balance + limit - credit) Console.WriteLine("The credit is over");
+            else
+            {
+                double advance = s - balance;
+                credit += advance * (1 + percent);
+                base.balance = 0;
+            }
+        }
+        public override void Deposit(double s)
+        {
+            if (s < credit) credit -= s;
+            else
+            {
+                balance += s - credit;
+                credit = 0;
+            }
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //Card card = new Card(111111, "Tom", 10000);
+            //card.Print();
+            //card.Deposit(5000);
+            //card.Print();
+            //card.Withdraw(10000);
+            //card.Print();
+            //card.Withdraw(10000);
+            //card.Print();
+            //Creditcard crCard = new Creditcard(222222, "Bob", 20000);
+            //crCard.Print();
+            //crCard.Withdraw(10000);
+            //crCard.Print();
+            //crCard.Withdraw(15000);
+            //crCard.Print();
+            //crCard.Withdraw(10000);
+            //crCard.Print();
+            //crCard.Deposit(5000);
+            //crCard.Print();
+            //crCard.Deposit(10000);
+
+            Card[] clients = { new Card(111111, "Smith", 10000), new Creditcard(222222, "Brown", 20000), new Card(333333, "Obama", 30000) };
+            bool f1 = true;
+            while (f1)
+            {
+                Console.WriteLine("1 - Withdraw, 2 - Deposit, 3 - Print, 0 - Exit");
+                int k, n, pos = -1;
+                double s;
+                bool f = true;
+                if (int.TryParse(Console.ReadLine(), out k))
+                {
+                    switch (k)
+                    {
+                        case 1:
+                            Console.WriteLine("Enter the number : ");
+                            while (f)
+                            {
+                                if(int.TryParse(Console.ReadLine(), out n))
+                                {
+                                    pos = -1;
+                                    for(int i = 0; i < clients.Length; i++)
+                                    {
+                                        if(clients[i].Num == n)
+                                        {
+                                            f1 = false;
+                                            pos = i;
+                                            break;
+                                        }
+                                    }
+                                }
+                                if (pos == -1)
+                                {
+                                    Console.WriteLine("Incorrent number");
+                                    continue;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Sum : ");
+                                    if (double.TryParse(Console.ReadLine(), out s))
+                                        clients[pos].Withdraw(s);
+                                    else Console.WriteLine("Incorrent number");
+                                }
+                            }
+                            break;
+                        case 2:
+                            while (f)
+                            {
+                                Console.WriteLine("Enter the number : ");
+                                if (int.TryParse(Console.ReadLine(), out n))
+                                {
+                                    pos = -1;
+                                    for (int i = 0; i < clients.Length; i++)
+                                    {
+                                        if (clients[i].Num == n)
+                                        {
+                                            f = false;
+                                            pos = i;
+                                            break;
+                                        }
+                                    }
+                                }
+                                if (pos == -1)
+                                {
+                                    Console.WriteLine("Incorrent number");
+                                    continue;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Sum : ");
+                                    if (double.TryParse(Console.ReadLine(), out s))
+                                        clients[pos].Deposit(s);
+                                    else Console.WriteLine("Incorrent number");
+                                }
+                            }
+                            break;
+                        case 3:
+                            for (int i = 0; i < clients.Length; i++)
+                                clients[i].Print();
+                            break;
+                        case 0: f1 = false; break;
+
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Incorrect value!");
+                    continue;
+                }
+            }
+        }
+    }
+}
