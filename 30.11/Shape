@@ -1,0 +1,100 @@
+using System;
+
+namespace Abstr
+{
+    abstract class Shape
+    {
+        protected double width;
+        protected double height;
+        protected string vid;
+        public Shape()
+        {
+            vid = "Shape";
+        }
+        public Shape(double w, double h, string v)
+        {
+            width = w;
+            height = h;
+            vid = v;
+        }
+        public double Width
+        {
+            get => width;
+            set { if (value < 0) throw new Exception("Wrong value");
+                width = value;
+            }
+        }
+        public double Height
+        {
+            get => height;
+            set
+            {
+                if (value < 0) throw new Exception("Wrong value");
+                height = value;
+            }
+        }
+        public string Vid
+        {
+            get => vid;
+            set { vid = value; }
+        }
+        public override string ToString()
+        {
+            return "Figure : " + vid + " Width = " + width + " Height = " + height;
+        }
+        public abstract double Perimetr();
+        public abstract double Square();
+    }
+    class Rectangle : Shape
+    {
+        public Rectangle() : base(0, 0, "Rectangle") { }
+        public Rectangle(double w, double h) : base(w, h, "Rectangle") { }
+        public override double Perimetr()
+        {
+            return 2 * (height + width);
+        }
+        public override double Square()
+        {
+            return height * width;
+        }
+    }
+    class Ellipse : Shape
+    {
+        const double PI = 3.1416;
+        public Ellipse() : base(0, 0, "Ellipse") { }
+        public Ellipse(double w, double h) : base(w, h, "Ellipse") { }
+        public override double Perimetr()
+        {
+            return (width / 2 + height / 2) * PI;
+        }
+        public override double Square()
+        {
+            return (width / 2) * (height / 2) * PI;
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Shape[] shapes = new Shape[5];
+            for(int i = 0; i < shapes.Length; i++)
+            {
+                Console.WriteLine("1 - rectangle, 2 - ellipse");
+                int k = int.Parse(Console.ReadLine());
+                Console.WriteLine("Width : ");
+                double w = double.Parse(Console.ReadLine());
+                Console.WriteLine("Height : ");
+                double h = double.Parse(Console.ReadLine());
+                if (k == 1)
+                    shapes[i] = new Rectangle(w, h);
+                else
+                    shapes[i] = new Ellipse(w,h);
+            }
+            for(int i = 0; i < shapes.Length; i++)
+            {
+                Console.WriteLine(shapes[i]);
+                Console.WriteLine("Perimetr : " + shapes[i].Perimetr() + " Square : " + shapes[i].Square());
+            }
+        }
+    }
+}
