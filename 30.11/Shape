@@ -1,8 +1,15 @@
 using System;
+using System.Collections;
 
 namespace Abstr
 {
-    abstract class Shape
+    interface IShape
+    {
+        double Perimetr();
+        double Square();
+    }
+    abstract class Shape : IShape 
+        //,IComparable
     {
         protected double width;
         protected double height;
@@ -44,6 +51,14 @@ namespace Abstr
         }
         public abstract double Perimetr();
         public abstract double Square();
+        //int IComparable.CompareTo(object obj)
+        //{
+        //    return Square().CompareTo((obj as Shape).Square());
+        //}
+        //int IComparable.CompareTo(object obj)
+        //{
+        //    return Perimetr().CompareTo((obj as Shape).Perimetr());
+        //}
     }
     class Rectangle : Shape
     {
@@ -72,11 +87,25 @@ namespace Abstr
             return (width / 2) * (height / 2) * PI;
         }
     }
+    class ShapeCompareSquare: IComparer
+    {
+        public int Compare(Object ob1, Object ob2)
+        {
+            return (ob1 as Shape).Square().CompareTo((ob2 as Shape).Square());
+        }
+    }
+    class ShapeComparePerimetr : IComparer
+    {
+        public int Compare(Object ob1, Object ob2)
+        {
+            return (ob1 as Shape).Perimetr().CompareTo((ob2 as Shape).Perimetr());
+        }
+    }
     class Program
     {
         static void Main(string[] args)
         {
-            Shape[] shapes = new Shape[5];
+            IShape[] shapes = new Shape[5];
             for(int i = 0; i < shapes.Length; i++)
             {
                 Console.WriteLine("1 - rectangle, 2 - ellipse");
@@ -91,6 +120,19 @@ namespace Abstr
                     shapes[i] = new Ellipse(w,h);
             }
             for(int i = 0; i < shapes.Length; i++)
+            {
+                Console.WriteLine(shapes[i]);
+                Console.WriteLine("Perimetr : " + shapes[i].Perimetr() + " Square : " + shapes[i].Square());
+            }
+            Console.WriteLine("---------------------------------------");
+            Console.WriteLine("Square - 1, Perimetr - 2");
+            int pr = int.Parse(Console.ReadLine());
+            if (pr == 1)
+                Array.Sort(shapes, new ShapeCompareSquare());
+            else
+                Array.Sort(shapes, new ShapeComparePerimetr());
+            //Array.Sort(shapes);
+            for (int i = 0; i < shapes.Length; i++)
             {
                 Console.WriteLine(shapes[i]);
                 Console.WriteLine("Perimetr : " + shapes[i].Perimetr() + " Square : " + shapes[i].Square());
