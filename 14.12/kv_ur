@@ -1,0 +1,99 @@
+using System;
+
+namespace Kv_ur
+{
+    class Program
+    {
+        public delegate void Method();
+        class Equation
+        {
+            double a, b, c;
+            double x1, x2;
+            int count;
+            const int inf = int.MaxValue;
+            public Method solve;
+            public Equation(params double[] coef)
+            {
+                switch (coef.Length)
+                {
+                    case 3: 
+                        a = coef[0];
+                        b = coef[1];
+                        c = coef[2];
+                        break;
+                    case 2:
+                        a = 0.0;
+                        b = coef[0];
+                        c = coef[1];
+                        break;
+                    case 1:
+                        a = 0.0;
+                        b = 0.0;
+                        c = coef[0];
+                        break;
+                    default: throw new Exception("Wrong parametrs!");
+                }
+                if (a == 0.0)
+                    if (b == 0.0)
+                        solve = NullSolve;
+                    else solve = LinSolve;
+                else solve = QSolve;
+            }
+            public void QSolve()
+            {
+                double d = b * b - 4 * a * c;
+                if(d < 0)
+                    count = 0;
+                else
+                    if (d > 0)
+                    {
+                        count = 2;
+                        d = Math.Sqrt(d);
+                        x1 = (-b - d) / (2 * a);
+                        x2 = (-b + d) / (2 * a);
+                    }
+                else
+                {
+                    count = 1;
+                    x1 = x2 = -b / (2 * a);
+                }
+            }
+            public void LinSolve()
+            {
+                count = 1;
+                x1 = x2 = -c / b;
+            }
+            public void NullSolve()
+            {
+                if (c == 0.0)
+                    count = inf;
+                else
+                    count = 0;
+            }
+            public void Print()
+            {
+                switch (count)
+                {
+                    case 2:
+                        Console.WriteLine($"x1 = {x1}, x2 = {x2}");
+                        break;
+                    case 1:
+                        Console.WriteLine($"x1 = {x1}");
+                        break;
+                    case 0:
+                        Console.WriteLine("No roots");
+                        break;
+                    case inf:
+                        Console.WriteLine("Infinity");
+                        break;
+                }
+            }
+        }
+        static void Main(string[] args)
+        {
+            Equation eq = new Equation(1,2,-5);
+            eq.solve();
+            eq.Print();
+        }
+    }
+}
