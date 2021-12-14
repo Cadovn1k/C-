@@ -89,11 +89,70 @@ namespace Kv_ur
                 }
             }
         }
+        class Counter
+        {
+            public delegate void R();
+            public event R ready;
+            public void count()
+            {
+                for(int i = 0; i <= 100; i++)
+                {
+                    if (i == 100)
+                        if (ready != null)
+                            ready();
+                }
+            }
+        }
+        class Ready1
+        {
+            public void Ready()
+            {
+                Console.WriteLine("Be ready!");
+            }
+        }
+        class Ready2
+        {
+            public void Ready()
+            {
+                Console.WriteLine("Start!");
+            }
+        }
+        public delegate void handler();
+        class MyDie
+        {
+            Random r = new Random();
+            public event handler Six;
+            public int Kick()
+            {
+                int k = r.Next(6) + 1;
+                if (k == 6)
+                    Six();
+                return k;
+            }
+        }
+        static void onSix()
+        {
+            Console.WriteLine("Congratulations!");
+        }
         static void Main(string[] args)
         {
-            Equation eq = new Equation(1,2,-5);
-            eq.solve();
-            eq.Print();
+            //Equation eq = new Equation(1,2,-5);
+            //eq.solve();
+            //eq.Print();
+
+            //Ready1 r1 = new Ready1();
+            //Ready2 r2 = new Ready2();
+            //Counter c = new Counter();
+            //c.ready += r1.Ready;
+            //c.ready += r2.Ready;
+            //c.count();
+
+            MyDie d = new MyDie();
+            d.Six += onSix;
+            for(int i = 0; i < 20; i++)
+            {
+                Console.WriteLine(d.Kick()); 
+            }
         }
     }
 }
